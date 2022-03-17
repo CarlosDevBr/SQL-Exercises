@@ -70,3 +70,15 @@ call criarSalaSe(49, 'telecine');
 call criarSalaSe(70, 'sbt');
 
 #6 - C
+delimiter $
+create procedure criarSessaoNova(idsala int, idfilme int, dataHora datetime, qtdeVenda int)
+	begin
+		insert into sessao values
+		(idsala, idfilme, dataHora, qtdeVenda);
+    end;
+$
+delimiter ;
+
+call criarSessaoNova(50, 12, '2021-08-21 23:59', 90);
+
+select * from sessao;
