@@ -82,3 +82,76 @@ delimiter ;
 call criarSessaoNova(50, 12, '2021-08-21 23:59', 90);
 
 select * from sessao;
+
+-- Exemplo com IN
+DELIMITER &&
+CREATE PROCEDURE filmeGenero (varGenero VARCHAR(60))
+BEGIN
+	Select F.titulo, G.descricao, S.dataHora from sessao S 
+	inner join filme F
+	on S.filme_idFilme = F.idFilme 
+	inner join genero G 
+	on F.genero_idgenero = G.idgenero
+    where G.descricao=varGenero;
+END;
+&&
+DELIMITER ;
+
+-- Exemplo com OUT
+Exemplo out----------------------
+delimiter //
+CREATE PROCEDURE ObtemAtores (OUT qtdeAtores INT)
+BEGIN
+SELECT COUNT(*)
+   INTO qtdeAtores
+   FROM cinema.ator;
+END
+//
+
+
+inout ----------------------------------
+delimiter //
+CREATE PROCEDURE aumento (INOUT valor DECIMAL(10,2), taxa DECIMAL(10,2))
+BEGIN
+	SET valor = valor +  valor * taxa /100;
+END
+//
+
+-- criamos variavel valorinicial e usamos para pasar o parametro valor
+-- aumento de 15%
+
+set @variavelinicial = 20.00;
+select @variavelinicial;
+
+call aumento(@variavelinicial, 15.00);
+
+-- verifique novamente o valor da variavel
+select @variavelinicial;
+delimiter ;
+
+-- Criando função
+delimiter $
+create function fn_teste(a decimal(10, 2), b int)
+	RETURNS int
+    NO SQL
+ BEGIN
+	return a * b;
+END$ 
+delimiter ;
+
+-- invocando a função
+select fn_teste(5.2, 10) as result;
+
+
+-- ATIVIDADE
+#2
+alter table sessao
+add vlr_Ingresso decimal(4,2);
+
+update sessao
+set vlr_Ingresso = 30.00;
+
+select * from sessao;
+
+#3
+select sessao.*, fn_teste(vlr_Ingresso, 5) as total from sessao;
