@@ -154,4 +154,16 @@ set vlr_Ingresso = 30.00;
 select * from sessao;
 
 #3
-select sessao.*, fn_teste(vlr_Ingresso, 5) as total from sessao;
+select sessao.*, fn_teste(vlr_Ingresso, 5) as total 
+from sessao
+where filme_idFilme = 10;
+
+#4
+select s.sala_idsala,filme_idFilme,dataHora, fn_teste(vlr_Ingresso, 5) as total 
+from sessao s
+where s.sala_idsala = 50;
+
+#5
+select s.sala_idsala,filme_idFilme,dataHora, fn_teste(vlr_Ingresso, 5) as total 
+from sessao s
+where s.sala_idsala = 50 and filme_idFilme = 10;
