@@ -152,6 +152,28 @@ insert into pedido values(16, 15, 100, 3, null, 0);
 select * from movimento;
 select * from pedido;
 
+=====================================================================
+Exemplo 2:
+==================================================================
+DELIMITER $$
+CREATE TRIGGER atualizaMovimentoA
+AFTER INSERT ON pedido
+FOR EACH ROW
+BEGIN
+IF (select count(*) from movimento 
+	 where idproduto = NEW.produto_idproduto
+       and datamovimento = current_date()) > 0 THEN  -- se achar qualquer valor quer dizer que o produto já está cadastrado no dia corrente
+    UPDATE movimento
+       SET qtde = qtde + NEW.quantidade
+	 where idproduto = NEW.produto_idproduto
+       and datamovimento = current_date();
+ELSE
+	INSERT INTO movimento
+	VALUES(current_date(),NEW.produto_idproduto,NEW.quantidade);
+END IF;
+END $$
+DELIMITER ;
+
 -- EXERCICIO 6
 
 CREATE TABLE IF NOT EXISTS `bdrest`.`exProduto` (
